@@ -63,14 +63,16 @@ do
     fi
 
     if [ "$skipdb" == "-1" ] ; then
-        mkdir -p "$DEST_mysql/$sitefolder/db"
+        mkdir -p "$DEST_mysql/"
         if [ "$CLEANUP" == 1 ]; then
-            find "$DEST_mysql/$sitefolder/db/" -type f -mtime +"$CLEANUP_OLDER_THAN" -delete
+            find "$DEST_mysql/" -type f -mtime +"$CLEANUP_OLDER_THAN" -delete
         fi
-        FILE="$DEST_mysql/$sitefolder/db/$NOW-$db-$HOSTNAME.gz"
+        FILE="$DEST_mysql/$NOW-$db-$HOSTNAME.gz"
         # On boucle, et on dump toutes les bases et on les compresse
         $MYSQLDUMP -u $Mysql_User -h $Mysql_host -p$Mysql_Paswd $db --routines | $GZIP -9 > "$FILE"
         echo "Base de donnée : $db sauvegardée dans $FILE"
     fi
 done
+
+chown 1000:1000 $DEST_mysql -R
 
