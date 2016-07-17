@@ -11,7 +11,10 @@ else
   done
 fi
 
-if [ "$2" != "" ];
+if [ -n "$MYSQL_DATABASE" ];
+then
+  DB_TARGET="$MYSQL_DATABASE"
+elif [ "$2" != "" ];
 then
   DB_TARGET="$2"
 else
@@ -22,6 +25,5 @@ else
   done
 fi
 
-
-echo "IMPORT DU DUMP"
+echo "Import du fichier $DB_TO_IMPORT dans $DB_TARGET"
 zcat /var/db/${DB_TO_IMPORT} | mysql -uroot -pmysql ${DB_TARGET}
